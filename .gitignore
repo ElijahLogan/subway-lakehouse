@@ -1,0 +1,37 @@
+# secrets & local config -- this repo is public
+.env
+.env.*
+!.env.example
+*.tfvars
+!*.tfvars.example
+dbt/profiles.yml
+.databrickscfg
+
+# terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+
+# build & caches
+build/
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+spark-warehouse/
+metastore_db/
+derby.log
+
+# dbt
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+
+# databricks bundle state
+.databricks/
+
+# local data from the poller
+data/
+
