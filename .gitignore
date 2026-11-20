@@ -12,6 +12,7 @@ dbt/profiles.yml
 *.tfstate
 *.tfstate.*
 crash.log
+*.hcl
 
 # build & caches
 build/
