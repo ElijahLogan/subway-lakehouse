@@ -33,3 +33,13 @@ provider "databricks" {}
 module databricks {
   source = "./modules/databricks"
 }
+
+
+
+
+module lambda {
+  source = "./modules/lambda"
+  env             = var.env
+  databricks_host = var.databricks_host
+  volume_path     = var.volume_path
+}
