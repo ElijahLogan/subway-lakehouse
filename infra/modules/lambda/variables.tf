@@ -5,7 +5,6 @@ variable "env" {
 variable "lambda_zip" {
   description = "Path to the zip built by `make lambda`"
   type        = string
-  default     = "../../../build/layer.zip"
 }   
 
 variable "databricks_host" {
