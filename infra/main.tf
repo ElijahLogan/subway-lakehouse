@@ -42,4 +42,13 @@ module lambda {
   env             = var.env
   databricks_host = var.databricks_host
   volume_path     = var.volume_path
+  lambda_zip = "${path.root}/../build/layer.zip"
+}
+
+
+module "orchestate" {
+  source = "./modules/orchestration"
+  env             = var.env
+  lambda_arn =  module.lambda.poller_function_arn
+
 }
