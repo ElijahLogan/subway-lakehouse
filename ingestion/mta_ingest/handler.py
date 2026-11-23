@@ -26,7 +26,7 @@ from .sinks import LocalSink, VolumeSink, object_key, to_ndjson_gz
 log = logging.getLogger()
 log.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
-USER_AGENT = "subway-pulse/0.1 (+https://github.com/elijahlogan/subway-lakehouse)"
+USER_AGENT = "subway-lake/0.1 (+https://github.com/elijahlogan/subway-lakehouse)"
 
 Fetcher = Callable[[str], bytes]
 

@@ -4,14 +4,14 @@ locals {
 
 
 resource "aws_ssm_parameter" "databricks_token" {
-  name  = "/subway-pulse/${var.env}/databricks_token"
+  name  = "/subway-lake/${var.env}/databricks_token"
   type  = "SecureString" # standard tier + AWS-managed key = free
   value = "set-me"
   lifecycle { ignore_changes = [value] }
 }
 
 resource "aws_ssm_parameter" "dd_api_key" {
-  name  = "/subway-pulse/${var.env}/dd_api_key"
+  name  = "/subway-lake/${var.env}/dd_api_key"
   type  = "SecureString"
   value = "set-me"
   lifecycle { ignore_changes = [value] }
@@ -96,3 +96,5 @@ resource "aws_lambda_function" "poller" {
 
   depends_on = [aws_cloudwatch_log_group.poller]
 }
+
+

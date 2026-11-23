@@ -29,7 +29,7 @@ class Metrics:
     def gauge(self, name: str, value: float, tags: list[str] | None = None) -> None:
         self._series.append(
             {
-                "metric": f"subway_pulse.{name}",
+                "metric": f"subway_lake.{name}",
                 "type": GAUGE,
                 "points": [{"timestamp": int(time.time()), "value": float(value)}],
                 "tags": [f"env:{self.env}", *(tags or [])],
