@@ -54,21 +54,21 @@ resource "aws_iam_role_policy" "poller" {
 }
 
 
-data "archive_file" "poller" {
-  type        = "zip"
-  source_dir  = "${path.module}/../../../ingestion"
-  output_path = "${path.module}/../../../build/layer.zip"
-  excludes    = ["tests", "requirements.txt"]
-}
+# data "archive_file" "poller" {
+#   type        = "zip"
+#   source_dir  = "${path.module}/../../../ingestion"
+#   output_path = "${path.module}/../../../build/layer.zip"
+#   excludes    = ["tests", "requirements.txt"]
+# }
 
-# Dependencies: built by `make layer`, only when requirements change
-resource "aws_lambda_layer_version" "deps" {
-  layer_name               = "subway-lake-deps"
-  filename                 = "${path.module}/../../../build/layer.zip"
-  source_code_hash         = filebase64sha256("${path.module}/../../../build/layer.zip")
-  compatible_runtimes      = ["python3.12"]
-  compatible_architectures = ["arm64"]
-}
+# # Dependencies: built by `make layer`, only when requirements change
+# resource "aws_lambda_layer_version" "deps" {
+#   layer_name               = "subway-lake-deps"
+#   filename                 = "${path.module}/../../../build/layer.zip"
+#   source_code_hash         = filebase64sha256("${path.module}/../../../build/layer.zip")
+#   compatible_runtimes      = ["python3.12"]
+#   compatible_architectures = ["arm64"]
+# }
 
 resource "aws_lambda_function" "poller" {
   function_name    = "${local.name}-poller"
