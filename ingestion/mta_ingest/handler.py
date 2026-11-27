@@ -21,7 +21,7 @@ from concurrent.futures import ThreadPoolExecutor
 from .feeds import all_feeds, feed_url
 from .metrics import Metrics
 from .parse import RECORD_TYPES, parse_feed
-from .sinks import LocalSink, VolumeSink, object_key, to_ndjson_gz
+from .sinks import  VolumeSink, object_key, to_ndjson_gz
 
 log = logging.getLogger()
 log.setLevel(os.environ.get("LOG_LEVEL", "INFO"))

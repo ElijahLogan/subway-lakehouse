@@ -39,45 +39,34 @@ class VolumeSink:
         self.timeout = timeout
 
     def write(self, key: str, data: bytes) -> str:
-        path = f"{self.volume_path}/{key}"
-        url = f"{self.host}/api/2.0/fs/files{urllib.parse.quote(path)}?overwrite=true"
-        req = urllib.request.Request(
-            url,
-            data=data,
-            method="PUT",
-            headers={
-                "Authorization": f"Bearer {self.token}",
-                "Content-Type": "application/octet-stream",
-            },
-        )
-        with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-            resp.read()
-        return path
+            clean_host = self.host.strip().rstrip("/")
+            clean_volume = self.volume_path.strip().rstrip("/")
+            clean_key = key.lstrip("/")
+            path = f"{clean_volume}/{clean_key}"
+            encoded_path = urllib.parse.quote(path, safe="/")
+            url = f"{clean_host}/api/2.0/fs/files{encoded_path}?overwrite=true"
 
+            req = urllib.request.Request(
+                url,
+                data=data,
+                method="PUT",
+                headers={
+                    "Authorization": f"Bearer {self.token}",
+                    "Content-Type": "application/octet-stream",
+                },
+            )
 
-class LocalSink:
-    """Write to a local folder. Handy for development and for tests."""
-    def __init__(self, host: str, token: str, volume_path: str, timeout: int = 30):
-        self.host = host.rstrip("/")
-        self.token = token
-        self.volume_path = volume_path.rstrip("/")  # e.g. /Volumes/subway/raw/landing
-        self.timeout = timeout
+            last_exc: Exception | None = None
+            for attempt in range(3):
+                try:
+                    with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                        resp.read()
+                    return path
+                except Exception as e:
+                    last_exc = e
+                    print(f"VolumeSink.write failed (attempt {attempt + 1}/3) url={url}: {repr(e)}")
+                    if attempt < 2:
+                        time.sleep(0.5 * (attempt + 1))
 
-    def __init__(self, root: str):
-        self.root = Path(root)
-
-    def write(self, key: str, data: bytes) -> str:
-        path = f"{self.volume_path}/{key}"
-        url = f"{self.host}/api/2.0/fs/files{urllib.parse.quote(path)}?overwrite=true"
-        req = urllib.request.Request(
-            url,
-            data=data,
-            method="PUT",
-            headers={
-                "Authorization": f"Bearer {self.token}",
-                "Content-Type": "application/octet-stream",
-            },
-        )
-        with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-            resp.read()
-        return path
+            assert last_exc is not None
+            raise last_exc

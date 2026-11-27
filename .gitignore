@@ -36,3 +36,4 @@ dbt/dbt_packages/
 # local data from the poller
 data/
 infra/setup.txt
+infra/prod-setup.txt
